@@ -1,0 +1,1405 @@
+{
+  "name": "STUDENT_AGENT_ENG",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2480,
+        380
+      ],
+      "id": "a57b93bf-7415-41bb-8edc-c7ffdadaac9e",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "MPyV62fCgyggKXWj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1100,
+        300
+      ],
+      "id": "79316ee6-57e1-46e9-9411-fd1ae6fa1157",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "MPyV62fCgyggKXWj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=Temat: {{ $('message received').item.json.subject }}, od: {{ $('message received').item.json.toRecipients[0].emailAddress.address }}, Treść: {{ $('message received').item.json.body.content }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -940,
+        300
+      ],
+      "id": "93ef79db-29d0-4edd-9c73-73e50b9a955a",
+      "name": "email Response Memory"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('message received telegram').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -960,
+        1060
+      ],
+      "id": "eb923b65-f881-4012-b4fb-9b9c4990a1fc",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "GET MANY EMAILS",
+        "resource": "folderMessage",
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQAuAAAAAADly_pPxYa4So3MWEZVxez9AQDzf124LAJOR6av_gFaFZT0AAAAAAEMAAA=",
+          "mode": "list",
+          "cachedResultName": "Skrzynka odbiorcza",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQAuAAAAAADly_pPxYa4So3MWEZVxez9AQDzf124LAJOR6av_gFaFZT0AAAAAAEMAAA%3D"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        1020
+      ],
+      "id": "e235ec28-8f23-45f4-b130-186bfbdf06d4",
+      "name": "get email messages",
+      "webhookId": "cc45ea32-8094-4c43-813f-d2228700c808",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1120,
+        1060
+      ],
+      "id": "a0041388-ae8b-47e7-a664-34c9ee11135d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "MPyV62fCgyggKXWj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "fromAllCalendars": false,
+        "calendarId": {
+          "__rl": true,
+          "value": "AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQBGAAAAAADly_pPxYa4So3MWEZVxez9BwDzf124LAJOR6av_gFaFZT0AAAAAAEGAADzf124LAJOR6av_gFaFZT0AAAAAHqwAAA=",
+          "mode": "list",
+          "cachedResultName": "Kalendarz"
+        },
+        "output": "fields",
+        "fields": [
+          "body",
+          "bodyPreview",
+          "createdDateTime",
+          "end",
+          "start",
+          "subject",
+          "iCalUId"
+        ],
+        "filters": {
+          "custom": "={{\"organizer/emailAddress/name eq 'Adrian Konieczny'\"}}"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -260,
+        960
+      ],
+      "id": "c02832bb-c941-4e62-90ca-af7bcafc4575",
+      "name": "Get calendar events",
+      "webhookId": "c0b6582d-aa33-4a99-8001-c02f8b61a611",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "get",
+        "calendarId": {
+          "__rl": true,
+          "value": "AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQBGAAAAAADly_pPxYa4So3MWEZVxez9BwDzf124LAJOR6av_gFaFZT0AAAAAAEGAADzf124LAJOR6av_gFaFZT0AAAAAHqwAAA=",
+          "mode": "list",
+          "cachedResultName": "Kalendarz"
+        },
+        "eventId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event', ``, 'string') }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        1140
+      ],
+      "id": "7eebe0f6-8fea-4628-9ff4-0ecaad264287",
+      "name": "fetch event",
+      "webhookId": "4f583aff-e737-4b04-8e96-4547852f3e2d",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2220,
+        1040
+      ],
+      "id": "2dbb8bfc-b2f8-4cc7-973a-27c6eb110b5b",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "MPyV62fCgyggKXWj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('message received telegram').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2060,
+        1120
+      ],
+      "id": "583e9289-cfd0-45b1-a24e-7c433a536474",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('message received telegram').item.json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1060,
+        1600
+      ],
+      "id": "a05f77b6-9a87-49b5-9bdf-176d2affb702",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "gpt-4"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1240,
+        1580
+      ],
+      "id": "4e15cf51-cc56-4f4b-ab25-5f1643be4358",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "MPyV62fCgyggKXWj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pageId": {
+          "__rl": true,
+          "value": "https://www.notion.so/essa-1d14bcd708048099aac3febe17f03486?pvs=12",
+          "mode": "url"
+        },
+        "title": "={{ $('message received telegram').item.json.message.text }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "textContent": "={{ $('AGENT_TASK').item.json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        1300
+      ],
+      "id": "e376bd6a-27ce-42fa-af49-1e3fbf05097f",
+      "name": "Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "QpASQSbfw8Wh8QZV",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are the manager of AI assistants. Your task is to delegate the task you receive to the appropriate agent.\n\nYou currently have two agents available:\n\nAGENT_ADMINISTRATION (handles email, calendar, and other general tasks)\n\nAGENT_TASK (handles more advanced tasks requested by the student)\n\nRelatively simple questions should be directed to AGENT_ADMINISTRACJA.\n\nRespond with the agent's name only: AGENT_ADMINISTRATION or AGENT_TASK."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -2120,
+        840
+      ],
+      "id": "485bb990-9b67-4a78-9067-110461a35dba",
+      "name": "Agent Manager"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('message received telegram').item.json.message.text }}",
+        "options": {
+          "systemMessage": "You are a student assistant responsible for handling university-related matters.\n\nYou have access to the calendar — in your responses, do not include links to events and always list events in chronological order.\n\nYou also have access to the email inbox and can create email drafts.\n\nAdditionally, you can create calendar events. When creating events:\n\nAlways collect all required information: title, start date, and end date.\n\nIf the user doesn't provide complete details, ask follow-up questions to gather the missing information.\n\nOnce you have all the necessary information, create the event using the \"Create event\" tool.\n\nVERY IMPORTANT: After using the \"Create event\" tool, always check the result and inform the user that the event was successfully created, including its title and date.\n\nExample response after creating an event:\n\"The event was successfully created!\nTitle: [title]\nDate: [start date] – [end date]\"\n\nDO NOT USE EMOJIS.\n\nAfter each event creation, you must ALWAYS display a confirmation with full details of the created event."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -920,
+        720
+      ],
+      "id": "152c4c31-f5e8-4dc4-acbb-e496eee8baf7",
+      "name": "AGENT_ADMINISTRATION"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('message received telegram').item.json.message.text }}",
+        "options": {
+          "systemMessage": "You are an assistant who specializes in solving tasks for a student. You will prepare responses to queries in a format compatible with Notion. Use Notion-style text formatting. Respond in English."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -1120,
+        1360
+      ],
+      "id": "b9ff48f8-57f6-4d78-97c5-d2c276669e60",
+      "name": "AGENT_TASK"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "options": {
+          "systemMessage": "You are an assistant whose task is to summarize the latest email message from the inbox.\n\nThe output should be standardized as follows:\n\nNEW email message,\nWHEN: (date the email was received),\nSENDER: (email address along with first name and last name),\nSUBJECT: (subject of the message),\nSUMMARY: (summary of the message content),\nONLY TO ME?: (indicate whether the message was addressed only to me or to multiple recipients — answer YES or NO).\n\nUse double asterisks to bold the text."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -2420,
+        80
+      ],
+      "id": "582093ab-c860-4c43-aad6-e9795ca32a2a",
+      "name": "Notification Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data.text }}",
+        "options": {
+          "systemMessage": "You are an assistant responsible for drafting email replies on behalf of a student.\n\nEvaluate whether the received prompt should be expanded, and then prepare the email message. The tone of the message should be casual."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -1080,
+        0
+      ],
+      "id": "c8570833-a7d3-415a-91df-e9896df5cb8d",
+      "name": "Expand Content"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "output": "fields",
+        "fields": [
+          "body",
+          "subject",
+          "toRecipients",
+          "sender",
+          "from",
+          "receivedDateTime"
+        ],
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2660,
+        80
+      ],
+      "id": "edf0c50e-49bc-402a-bbfa-bf4d0b95af6d",
+      "name": "message received",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "output": "fields",
+        "fields": [
+          "body",
+          "sender",
+          "sentDateTime",
+          "subject",
+          "toRecipients"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -2240,
+        380
+      ],
+      "id": "6cd07097-df2f-4a69-9995-e8a382b46d22",
+      "name": "get message details",
+      "webhookId": "cf2c3cce-2399-42a2-8b6d-4160fd842680",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -2060,
+        100
+      ],
+      "id": "ae3e63ba-66c6-49ce-a575-3951f4a5c36d",
+      "name": "summarize message",
+      "webhookId": "0f2d4475-eeb0-4e68-a20f-42d9d789277a",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "=1892443074",
+        "message": "Do you want to respond?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ Yes",
+            "disapproveLabel": "❌ No"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 15,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1880,
+        100
+      ],
+      "id": "4fd2c824-7ed9-4104-ae6d-0374818224b9",
+      "name": "wait for response",
+      "webhookId": "769e13cf-9111-4a63-a6bc-e9bfbda11fd7",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.data.approved }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1680,
+        100
+      ],
+      "id": "c48f2087-c4c2-4523-888b-5c04b0b477f4",
+      "name": "respond?"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1892443074",
+        "message": "What should be the message content?",
+        "responseType": "freeText",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 10,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1420,
+        40
+      ],
+      "id": "11ba8ab7-5bc7-4a17-8a76-24b5447f2ee4",
+      "name": "message content",
+      "webhookId": "96cf95f1-2c7e-4227-ad56-9b8f95fb6dc0",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "No response to be send.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1420,
+        220
+      ],
+      "id": "c89fdd34-5e8f-4de6-a3ca-3d16d1df8481",
+      "name": "do not respond",
+      "webhookId": "0f2d4475-eeb0-4e68-a20f-42d9d789277a",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1892443074",
+        "message": "=This is your extended message: |{{ $('Expand Content').item.json.output }} Do you confirm it? A draft message will be created. ",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ Yes",
+            "disapproveLabel": "❌ No"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        0
+      ],
+      "id": "16d76dc0-cc5f-4c37-8a4c-4e6d0e1ad8e3",
+      "name": "approve extended content",
+      "webhookId": "8583ef18-4ea2-4154-806e-179014ca23e4",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.data.approved }}",
+              "value2": "={{ true }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "2b59e5ad-829d-4e73-884d-088f3eebc340",
+      "name": "create draft?"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Re: {{ $('message received').item.json.subject }}",
+        "bodyContent": "={{ $('Expand Content').item.json.output }}",
+        "additionalFields": {
+          "toRecipients": "={{ $('message received').item.json.toRecipients[0].emailAddress.address }}"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -140
+      ],
+      "id": "86594893-7d1b-4890-97ef-fbd45bf8e0fa",
+      "name": "create draft",
+      "webhookId": "31050c71-cabe-4982-bfbd-99c56d501470",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "Draft creation cancelled",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -60,
+        60
+      ],
+      "id": "c6d2d09e-23bb-407f-a643-5a3d4812df59",
+      "name": "action cancelled",
+      "webhookId": "0f2d4475-eeb0-4e68-a20f-42d9d789277a",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "A draft message has been created in your mailbox.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        -120
+      ],
+      "id": "100ab808-205d-4fc4-a082-1b2212b5fdb3",
+      "name": "draft created notification",
+      "webhookId": "0f2d4475-eeb0-4e68-a20f-42d9d789277a",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2440,
+        840
+      ],
+      "id": "6119d1a5-2f11-43a2-ba5b-c4d854a5712c",
+      "name": "message received telegram",
+      "webhookId": "de6f3f38-2161-4549-8124-9d613f6287c9",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc4a651c-b839-4d41-aec3-5e1989995a2a",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "AGENT_ADMINISTRATION",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1480,
+        880
+      ],
+      "id": "fa7c4c16-d78c-4cf6-aa2b-06398a594d6f",
+      "name": "agent selection"
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "delete",
+        "calendarId": {
+          "__rl": true,
+          "value": "AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQBGAAAAAADly_pPxYa4So3MWEZVxez9BwDzf124LAJOR6av_gFaFZT0AAAAAAEGAADzf124LAJOR6av_gFaFZT0AAAAAHqwAAA=",
+          "mode": "list",
+          "cachedResultName": "Kalendarz"
+        },
+        "eventId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event', ``, 'string') }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        1100
+      ],
+      "id": "14477ec5-d7aa-4c3c-a9dc-5bbf4f68cfa7",
+      "name": "delete event",
+      "webhookId": "5966f07f-6114-4e7d-af81-eb09aac02bce",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendarId": {
+          "__rl": true,
+          "value": "AAMkADRlMDVmZGQ2LTgxZTUtNGY0OC1hYWUyLWY2ZmE4NDMyMmU3MQBGAAAAAADly_pPxYa4So3MWEZVxez9BwDzf124LAJOR6av_gFaFZT0AAAAAAEGAADzf124LAJOR6av_gFaFZT0AAAAAHqwAAA=",
+          "mode": "list",
+          "cachedResultName": "Kalendarz"
+        },
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "startDateTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "endDateTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTool",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        1140
+      ],
+      "id": "76e0b056-0a66-4520-922e-cbefa92d8f1f",
+      "name": "create event",
+      "webhookId": "737df388-412a-43e0-b1ae-ffe4bdf4bdd3",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "mTVtgB18m9AafBRW",
+          "name": "Microsoft Outlook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -360,
+        720
+      ],
+      "id": "42d94a1a-6ede-412e-a3cb-3b0478c61d3c",
+      "name": "respond",
+      "webhookId": "0f2d4475-eeb0-4e68-a20f-42d9d789277a",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -680,
+        1420
+      ],
+      "id": "35b12b25-fad5-4c0d-9df8-3ea8487990a4",
+      "name": "reply",
+      "webhookId": "ce77a3d1-2e1f-428a-8dc9-df450de0bac2",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "1892443074",
+        "message": "Do you want to save it in notion?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "✅ Yes",
+            "disapproveLabel": "❌ No"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 2,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -440,
+        1420
+      ],
+      "id": "78d32818-017d-4d4c-89d5-a9187c1053d5",
+      "name": "save in notion?",
+      "webhookId": "b1d26cd3-1266-43a0-bf48-0f764f62a5e1",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c01e5eb-4309-407d-be7a-02e1daf60b29",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "={{ true }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        1440
+      ],
+      "id": "2fe607b0-a12a-4cb6-acd0-91def70119be",
+      "name": "Create a page in notion?"
+    },
+    {
+      "parameters": {
+        "chatId": "1892443074",
+        "text": "Response has been saved in notion.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        420,
+        1300
+      ],
+      "id": "878990a8-ac4d-4691-a6be-db55b63073e7",
+      "name": "notion save confirmation",
+      "webhookId": "ec8fb98d-3c29-4988-b2ba-40952329d6b6",
+      "credentials": {
+        "telegramApi": {
+          "id": "QAmtiJEv6jI8yoQy",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Notification Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Expand Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get email messages": {
+      "ai_tool": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get calendar events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent Manager",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agent Manager",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AGENT_TASK",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENT_TASK",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "email Response Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Expand Content",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetch event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Manager": {
+      "main": [
+        [
+          {
+            "node": "agent selection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENT_ADMINISTRATION": {
+      "main": [
+        [
+          {
+            "node": "respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENT_TASK": {
+      "main": [
+        [
+          {
+            "node": "reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notification Agent": {
+      "main": [
+        [
+          {
+            "node": "summarize message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expand Content": {
+      "main": [
+        [
+          {
+            "node": "approve extended content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "message received": {
+      "main": [
+        [
+          {
+            "node": "Notification Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get message details": {
+      "ai_tool": [
+        [
+          {
+            "node": "Notification Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "summarize message": {
+      "main": [
+        [
+          {
+            "node": "wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait for response": {
+      "main": [
+        [
+          {
+            "node": "respond?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "respond?": {
+      "main": [
+        [
+          {
+            "node": "message content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "do not respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "message content": {
+      "main": [
+        [
+          {
+            "node": "Expand Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "approve extended content": {
+      "main": [
+        [
+          {
+            "node": "create draft?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create draft?": {
+      "main": [
+        [
+          {
+            "node": "create draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "action cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create draft": {
+      "main": [
+        [
+          {
+            "node": "draft created notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "message received telegram": {
+      "main": [
+        [
+          {
+            "node": "Agent Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "agent selection": {
+      "main": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AGENT_TASK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AGENT_ADMINISTRATION",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reply": {
+      "main": [
+        [
+          {
+            "node": "save in notion?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save in notion?": {
+      "main": [
+        [
+          {
+            "node": "Create a page in notion?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a page in notion?": {
+      "main": [
+        [
+          {
+            "node": "Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion": {
+      "main": [
+        [
+          {
+            "node": "notion save confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "do not respond": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "aa8c2f41-5cd4-4670-9b1d-5702d2c82620",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5c83d4b171f48bdf672977e43da68032f8339ffff8337d7b13c6cf816c8a0ac"
+  },
+  "id": "XMLkqeuTymuCPbUe",
+  "tags": []
+}
